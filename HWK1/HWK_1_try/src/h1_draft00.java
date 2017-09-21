@@ -2,7 +2,7 @@ import java.util.*;
 
 //import jdk.nashorn.internal.runtime.FindProperty;
 
-public class Hwk1_draft00 
+public class h1_draft00 
 {
 
 //	UP_LEFT,    0        UP_RIGHT,    1
@@ -264,10 +264,9 @@ public class Hwk1_draft00
     			tour_x_trace[next_m_ind] = x_step + cur_x;
     			tour_y_trace[next_m_ind] = y_step + cur_y;
     			visited_state[x_step + cur_x][y_step + cur_y] = true;
-
-				// next time, should explore case_ind  + 1
-    			to_search_cases[cur_m_ind] = case_ind + 1;    			
+			   			
     			boolean found_sol = runStrategy0(next_m_ind);
+    			
     			
     		//	resetSol(next_m_ind);
     		//	if(found_sol)
@@ -281,7 +280,11 @@ public class Hwk1_draft00
     		//	}
     			// if have explored all cases    			    				
     		}
+    		to_search_cases[cur_m_ind] = to_search_cases[cur_m_ind]+1; 
 		}
+		// next time, should explore case_ind  + 1
+		to_search_cases[cur_m_ind] = 8;    			
+
     	resetSol(cur_m_ind);
     	return false;
     	

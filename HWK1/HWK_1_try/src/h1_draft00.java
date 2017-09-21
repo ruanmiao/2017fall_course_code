@@ -27,7 +27,8 @@ public class h1_draft00
     // when the value of to_search_case >= 8, no more sol; it stores the un-explored case_ind 
     public static int[] to_search_cases = new int[board_size];
     
-    public static int cur_m_ind = 0;
+    //public static int cur_m_ind = 0;
+    public static int sol_count = 0;
 //    public static int cur_x = start_x;
 //    public static int cur_y = start_y;
 
@@ -36,19 +37,20 @@ public class h1_draft00
     	visited_state[start_x][start_y] = true;
     	tour_x_trace[0] = start_x;
     	tour_y_trace[0] = start_y;
-    	cur_m_ind = 0;
+    	//cur_m_ind = 0;
     	
-    	resetSol();
+    	resetAll();
      
     	String text = "KT: 8x8, strategy = 1, start = 2,3";
     	System.out.println(text);
 
+    	sol_count = 0;
     	runStrategy0(0);
     	
         return ;
     }
 
-    public static void resetSol()
+    public static void resetAll()
     {
     	for (int m_ind = 1; m_ind < board_size; m_ind++)
     	{
@@ -64,7 +66,7 @@ public class h1_draft00
     	tour_x_trace[0] = start_x;
     	tour_y_trace[0] = start_y;
     	to_search_cases[0] = 0;
-    	cur_m_ind = 0;
+    	//cur_m_ind = 0;
     	findSol = false;
     }
     
@@ -72,22 +74,31 @@ public class h1_draft00
     public static void resetSol(int reset_ind)
     {
     	assert(reset_ind > 0);
+    	assert(reset_ind < board_size);
     	for (int m_ind = reset_ind; m_ind < board_size; m_ind++)
     	{    		
-    		int x_ind = getXFromInd(m_ind);
-    		int y_ind = getYFromInd(m_ind);
+    		int x_ind = tour_x_trace[m_ind];
+    		int y_ind = tour_y_trace[m_ind];
     		
+    		if((tour_x_trace[m_ind]<0))
+    		{    			
+    			return ;
+    		}
+    		/*
     		if(!(visited_state[x_ind][y_ind]) && (tour_x_trace[m_ind]<0))
     		{
-    			break;
-    		}    		
+    			return ;
+    		}
+
+    		 */
+    		
     		visited_state[x_ind][y_ind] = false;    		
     		tour_x_trace[m_ind] = -1;
     		tour_y_trace[m_ind] = -1;
     		to_search_cases[m_ind] = 0;
     	}
     	
-    	cur_m_ind = reset_ind - 1;
+    	//cur_m_ind = reset_ind - 1;
     	visited_state[start_x][start_y] = true;
     	tour_x_trace[0] = start_x;
     	tour_y_trace[0] = start_y;
@@ -237,25 +248,39 @@ public class h1_draft00
     {       	
     	int cur_m_ind = start_ind;
     	int next_m_ind = cur_m_ind + 1;
-    	
+		int cur_x = tour_x_trace[cur_m_ind];
+		int cur_y = tour_y_trace[cur_m_ind];
+		boolean cur_visited = isVisited(cur_x, cur_y);
+		assert(cur_visited);
+    	    	
     	if (next_m_ind == board_size)
     	{
-    		if(validLast(tour_x_trace[cur_m_ind], tour_y_trace[cur_m_ind]))
+    		if((validLast(tour_x_trace[cur_m_ind], tour_y_trace[cur_m_ind])) && to_search_cases[cur_m_ind]<8)
     		{
+    			to_search_cases[cur_m_ind] = 8;
+    			
+    			visited_state[cur_x][cur_y] = true;
 	    		printSol();
+	    		sol_count = sol_count+1;
 	    	//	resetSol(cur_m_ind);
 				return true;			
     		}
-    		printSol();
-    		resetSol(cur_m_ind);
+    		// printSol();
+    		// resetSol(cur_m_ind);
     		return false;
     	}
     	
-    	for (int case_ind = to_search_cases[cur_m_ind]; case_ind < num_cases; case_ind++)
+    	int start_case = to_search_cases[cur_m_ind];
+    	for (int case_ind = start_case; case_ind < num_cases; case_ind++)
 		{
-    		int cur_x = tour_x_trace[cur_m_ind];
-    		int cur_y = tour_y_trace[cur_m_ind];
+    		if(next_m_ind < board_size)
+    		{
+    			resetSol(next_m_ind);
+    		}
+    		
     		boolean is_valid_move = testLMove(cur_x, cur_y, case_ind);
+    		
+    		to_search_cases[cur_m_ind] = to_search_cases[cur_m_ind]+1; 
     		
     		if(is_valid_move)
     		{    			
@@ -267,11 +292,18 @@ public class h1_draft00
 			   			
     			boolean found_sol = runStrategy0(next_m_ind);
     			
-    			
-    		//	resetSol(next_m_ind);
-    		//	if(found_sol)
+    			while(found_sol)
+    			{
+				//if(next_m_ind < board_size -1)
+				//{
+				//	resetSol(next_m_ind + 1);
+				//}
+    				found_sol = runStrategy0(next_m_ind);    				
+    			}
+    		    resetSol(next_m_ind);
+    		//	if(!found_sol)
     		//	{
-    			//	resetSol(next_m_ind);
+    		//		resetSol(next_m_ind);
     		//		return true;
     		//	}
     		//	else 
@@ -280,12 +312,11 @@ public class h1_draft00
     		//	}
     			// if have explored all cases    			    				
     		}
-    		to_search_cases[cur_m_ind] = to_search_cases[cur_m_ind]+1; 
 		}
 		// next time, should explore case_ind  + 1
 		to_search_cases[cur_m_ind] = 8;    			
 
-    	resetSol(cur_m_ind);
+    	// resetSol(cur_m_ind);
     	return false;
     	
     }
@@ -293,18 +324,20 @@ public class h1_draft00
     public static void printSol()
     {
     	// TODO: change the heading 
-    	System.out.print("001:");
+    	System.out.print("This so is the ");
+    	System.out.print(sol_count);
+    	System.out.print("th sol :");
     	
     	for (int i_ind = 0; i_ind < board_size; i_ind++)
     	{
-    		System.out.print(" ");
+    		System.out.print("\n");
     		System.out.print(tour_x_trace[i_ind]);
-    		System.out.print(",");
+    		System.out.print(" ");
     		System.out.print(tour_y_trace[i_ind]);    		
     	}
-    	System.out.print(" ");
+    	System.out.print("\n");
 		System.out.print(start_x);
-		System.out.print(",");
+		System.out.print(" ");
 		System.out.print(start_y); 
     	System.out.print("\n");
     }

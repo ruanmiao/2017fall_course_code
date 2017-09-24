@@ -9,6 +9,7 @@ num_skip = 1;
 start_ind = num_skip * (board_size + 2);
 
 fid = fopen('out.txt','rt');
+%fid = fopen('out_terminal.txt','rt');
 input = textscan(fid,'%d %d', board_size+1, 'headerlines', start_ind + 2);
 x = cell2mat(input(:,1));
 y = cell2mat(input(:,2));

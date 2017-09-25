@@ -15,13 +15,13 @@ public class h1_draft00
     private static final int board_edge_size = 8;
     private static final int board_size = board_edge_size * board_edge_size;
 
-    private static final int move_offset = 7;
-    private static final int start_x_const = 2;
-    private static final int start_y_const = 3;
-    private static int start_x = 2;
-    private static int start_y = 3;
+    private static final int move_offset = 1;
+    private static final int start_x_const = 1;
+    private static final int start_y_const = 2;
+    private static int start_x = 1;
+    private static int start_y = 2;
     private static final int num_cases = 8;
-    private static final int max_sol_count = 200;
+    private static final int max_sol_count = 1000000;
     private static final int max_move_count = 1000000;
     private static final double nano_to_second = 1000000000.0;
     
@@ -66,14 +66,15 @@ public class h1_draft00
     	int num_sol6 = 0;
     	
     	
-    	/*
+    	
     	// Statistic for S1
     	resetAll();     
     	text = "KT: 8x8, strategy = 1, start = 2,3";
     	System.out.println(text);
     	sol_count = 0;
     	move_count = 0;
-    	    	
+    	  
+    	/*
     	startTime = System.nanoTime();
     	runStrategy1(0);
     	estimatedTime1 = System.nanoTime()-startTime;
@@ -115,7 +116,7 @@ public class h1_draft00
     	runStrategy4(0);
     	estimatedTime4 = System.nanoTime() - startTime;
     	num_sol4 = sol_count;
-    	*/
+    	
 
     	
     	// Statistic for S5
@@ -128,11 +129,11 @@ public class h1_draft00
     	runStrategy5(0);
     	estimatedTime5 = System.nanoTime() - startTime;
     	num_sol5 = sol_count;
-		
+		*/
     	
     	
     	// Statistic for S6
-    	
+    	System.out.println();
     	resetAll();     
     	text = "KT: 8x8, strategy = 6, start = 2,3";
     	System.out.println(text);
@@ -143,7 +144,7 @@ public class h1_draft00
     	num_sol6 = sol_count;
 		
 
-    	/*
+    	
     	// Statistic for S1
     	double time_in_second1 = estimatedTime1 / nano_to_second;
     	System.out.println("************* Strategy 1 ******************");
@@ -194,7 +195,8 @@ public class h1_draft00
 //    	System.out.println(num_sol4/time_in_second4);
 //    	System.out.println("The end: average time elapsed each move is : ");
 //    	System.out.println(max_move_count/time_in_second4);
-    	*/
+    	
+    	
     	
     	// Statistic for S5
     	double time_in_second5 = estimatedTime5 / nano_to_second;
@@ -221,7 +223,7 @@ public class h1_draft00
 //    	System.out.println(num_sol6/time_in_second6);
 //    	System.out.println("The end: average time elapsed each move is : ");
 //    	System.out.println(max_move_count/time_in_second6);
-
+    	
     	    	
         return ;
     }
@@ -231,8 +233,8 @@ public class h1_draft00
     
     public static void resetAll()
     {
-    	start_x = 2;
-    	start_y = 3;
+    	start_x = 1;
+    	start_y = 2;
     	sol_count = 1;
     	move_count = 1;
     	for (int m_ind = 1; m_ind < board_size; m_ind++)
@@ -1267,9 +1269,33 @@ public class h1_draft00
     public static boolean strategy6Launch(int x_new, int y_new)
     {
     	// set virtual start x, start y
-    	resetAllWithNewStart(x_new, y_new);
+//    	resetAllWithNewStart(x_new, y_new);
     	
     	
+    	int x_step = 0;
+		int y_step = 0;
+		int x_next = 0;
+		int y_next = 0;
+    	
+		x_step = start_x;
+	    y_step = start_y;
+	    x_next = -x_step + start_x;
+	    y_next = -y_step + start_y;
+		tour_x_trace[1] = x_next;
+		tour_y_trace[1] = y_next;
+		visited_state[x_next][y_next] = true;
+		
+		x_step = start_y;
+	    y_step = start_x;
+	    x_next = x_step + start_x;
+	    y_next = y_step + start_y;
+		tour_x_trace[2] = x_next;
+		tour_y_trace[2] = y_next;
+		visited_state[x_next][y_next] = true;
+    	
+		runStrategy6(2);		
+		
+    	return false;
     }
     
 
@@ -1450,14 +1476,14 @@ public class h1_draft00
     	for (int i_ind = 0; i_ind < board_size; i_ind++)
     	{
     		System.out.print(" ");
-    		System.out.print(tour_x_trace[i_ind]);
+    		System.out.print(tour_x_trace[i_ind]+1);
     		System.out.print(",");
-    		System.out.print(tour_y_trace[i_ind]);    		
+    		System.out.print(tour_y_trace[i_ind]+1);    		
     	}
     	System.out.print(" ");
-		System.out.print(start_x);
+		System.out.print(start_x+1);
 		System.out.print(",");
-		System.out.print(start_y); 
+		System.out.print(start_y+1); 
     	System.out.print("\n");
     	
     }
@@ -1503,14 +1529,14 @@ public class h1_draft00
     	{
     		int real_ind = (i_ind + start_ind) % board_size;
     		System.out.print(" ");
-    		System.out.print(tour_x_trace[real_ind]);
+    		System.out.print(tour_x_trace[real_ind]+1);
     		System.out.print(",");
-    		System.out.print(tour_y_trace[real_ind]);    		
+    		System.out.print(tour_y_trace[real_ind]+1);    		
     	}
     	System.out.print(" ");
-		System.out.print(start_x);
+		System.out.print(start_x+1);
 		System.out.print(",");
-		System.out.print(start_y); 
+		System.out.print(start_y+1); 
     	System.out.print("\n");
     	
     	int next_sol = sol_count + 1;
@@ -1518,7 +1544,7 @@ public class h1_draft00
     	{
         	System.out.print("00"+next_sol);
     	}
-    	else if (sol_count<100)
+    	else if (next_sol<100)
     	{
     		System.out.print("0"+next_sol);
     	}
@@ -1529,17 +1555,17 @@ public class h1_draft00
     	System.out.print(":");
 
     	System.out.print(" ");
-		System.out.print(start_x);
+		System.out.print(start_x+1);
 		System.out.print(",");
-		System.out.print(start_y); 
+		System.out.print(start_y+1); 
     	for (int i_ind = board_size-1; i_ind >=  0; i_ind--)
     	{
     		int real_ind = (i_ind + start_ind) % board_size;
     		
     		System.out.print(" ");
-    		System.out.print(tour_x_trace[i_ind]);
+    		System.out.print(tour_x_trace[i_ind]+1);
     		System.out.print(",");
-    		System.out.print(tour_y_trace[i_ind]);    		
+    		System.out.print(tour_y_trace[i_ind]+1);    		
     	}
     	System.out.print("\n");
     	

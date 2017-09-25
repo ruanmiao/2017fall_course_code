@@ -2,7 +2,7 @@ import java.util.*;
 
 //import jdk.nashorn.internal.runtime.FindProperty;
 
-public class h1_draft00 
+public class KnightsTour 
 {
 
 //	UP_LEFT,    0        UP_RIGHT,    1
@@ -74,7 +74,7 @@ public class h1_draft00
     	sol_count = 0;
     	move_count = 0;
     	  
-    	/*
+    	
     	startTime = System.nanoTime();
     	runStrategy1(0);
     	estimatedTime1 = System.nanoTime()-startTime;
@@ -129,7 +129,7 @@ public class h1_draft00
     	runStrategy5(0);
     	estimatedTime5 = System.nanoTime() - startTime;
     	num_sol5 = sol_count;
-		*/
+		
     	
     	
     	// Statistic for S6
@@ -1528,18 +1528,18 @@ public class h1_draft00
     	for (int i_ind = 0; i_ind < board_size; i_ind++)
     	{
     		int real_ind = (i_ind + start_ind) % board_size;
-    		//System.out.print(" ");
-    		System.out.print("\n");
-    		System.out.print(tour_x_trace[real_ind]+1);
-    		//System.out.print(",");
     		System.out.print(" ");
+    		//System.out.print("\n");
+    		System.out.print(tour_x_trace[real_ind]+1);
+    		System.out.print(",");
+    		//System.out.print(" ");
     		System.out.print(tour_y_trace[real_ind]+1);    		
     	}
-    	//System.out.print(" ");
-    	System.out.print(" \n");
+    	System.out.print(" ");
+    	//System.out.print(" \n");
 		System.out.print(start_x+1);
-		//System.out.print(",");
-		System.out.print(" ");
+		System.out.print(",");
+		//System.out.print(" ");
 		System.out.print(start_y+1); 
     	System.out.print("\n");
     	
@@ -1558,21 +1558,21 @@ public class h1_draft00
     	}
     	System.out.print(":");
 
-    	//System.out.print(" ");
-    	System.out.print(" \n");
+    	System.out.print(" ");
+    	//System.out.print(" \n");
 		System.out.print(start_x+1);
-		//System.out.print(",");
-		System.out.print(" ");
+		System.out.print(",");
+		//System.out.print(" ");
 		System.out.print(start_y+1); 
     	for (int i_ind = board_size-1; i_ind >=  0; i_ind--)
     	{
     		int real_ind = (i_ind + start_ind) % board_size;
     		
-    		//System.out.print(" ");
-    		System.out.print("\n");
-    		System.out.print(tour_x_trace[i_ind]+1);
-    		//System.out.print(",");
     		System.out.print(" ");
+    		//System.out.print("\n");
+    		System.out.print(tour_x_trace[i_ind]+1);
+    		System.out.print(",");
+    		//System.out.print(" ");
     		System.out.print(tour_y_trace[i_ind]+1);    		
     	}
     	System.out.print("\n");
